@@ -1,10 +1,17 @@
 yea they banned chesscom and shi in college and uni 
+
 so i made this to play with your classmates 
+
 just need to gitclone this and npm install in both frontend and backend directory
+
 then do npm run dev in both frontend and backend directory (two terminals needs to be opened)
+
 ahhhh and make sure u connect to the same wifi as your friend or it wont work 
+
 it will show u the link as local and network 
+
 you need to click the local and give your friend the network link to open (frontend terminal)
+
 create the game and give him the code which is there on top right of your screen and gg enjoy 
 
 
