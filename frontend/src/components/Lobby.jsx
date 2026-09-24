@@ -1,12 +1,19 @@
 import { useState } from 'react';
 
+const TIME_CONTROL_GROUPS = [
+  { label: 'Bullet', options: ['1+0', '2+1'] },
+  { label: 'Blitz', options: ['3+0', '3+2', '5+0', '5+3'] },
+  { label: 'Rapid', options: ['10+0', '10+5', '15+10'] },
+];
+
 export default function Lobby({ onCreate, onJoin, error, connected, debug }) {
   const [mode, setMode] = useState('home');
   const [name, setName] = useState('');
   const [roomCode, setRoomCode] = useState('');
+  const [timeControl, setTimeControl] = useState('5+0');
   const submit = (event) => {
     event.preventDefault();
-    if (mode === 'create') onCreate(name.trim() || 'Player 1');
+    if (mode === 'create') onCreate(name.trim() || 'Player 1', timeControl);
     if (mode === 'join') onJoin(roomCode.trim().toUpperCase(), name.trim() || 'Player 2');
   };
   return (
@@ -34,6 +41,7 @@ export default function Lobby({ onCreate, onJoin, error, connected, debug }) {
               <button type="button" onClick={() => setMode('home')} className="mb-10 text-[10px] uppercase tracking-[0.18em] text-[#a9a59c] hover:text-[#f6f2e9]">← Back</button>
               <div className="mb-8"><div className="text-xs uppercase tracking-[0.22em] text-[#a9a59c]">{mode === 'create' ? 'New room' : 'Existing room'}</div><h2 className="mt-2 text-2xl font-bold">{mode === 'create' ? 'Open the board.' : 'Enter the room.'}</h2></div>
               <label className="mb-5 block"><span className="mb-2 block text-[10px] uppercase tracking-[0.17em] text-[#a9a59c]">Your name</span><input value={name} onChange={(event) => setName(event.target.value)} maxLength={24} placeholder="Player" className="w-full border border-white/15 bg-[#101010] px-4 py-3 text-sm text-[#f6f2e9] outline-none transition placeholder:text-[#706e68] focus:border-[#c49a52]" /></label>
+              {mode === 'create' && <label className="mb-5 block"><span className="mb-2 block text-[10px] uppercase tracking-[0.17em] text-[#a9a59c]">Time control</span><select value={timeControl} onChange={(event) => setTimeControl(event.target.value)} className="w-full border border-white/15 bg-[#101010] px-4 py-3 text-sm text-[#f6f2e9] outline-none transition focus:border-[#c49a52]">{TIME_CONTROL_GROUPS.map((group) => <optgroup key={group.label} label={group.label}>{group.options.map((option) => <option key={option} value={option}>{option}</option>)}</optgroup>)}</select></label>}
               {mode === 'join' && <label className="mb-5 block"><span className="mb-2 block text-[10px] uppercase tracking-[0.17em] text-[#a9a59c]">Room code</span><input value={roomCode} onChange={(event) => setRoomCode(event.target.value)} maxLength={5} required placeholder="A7K92" className="mono w-full border border-white/15 bg-[#101010] px-4 py-3 text-sm uppercase tracking-[0.25em] text-[#f6f2e9] outline-none transition placeholder:text-[#706e68] focus:border-[#c49a52]" /></label>}
               {error && <p className="mb-5 border border-[#c8816d]/40 bg-[#c8816d]/10 px-3 py-3 text-xs leading-5 text-[#e3a08e]">{error}</p>}
               <button type="submit" className="w-full bg-[#c49a52] px-5 py-4 text-sm font-bold uppercase tracking-[0.14em] text-[#171717] transition hover:bg-[#e0b96f]">{mode === 'create' ? 'Create game' : 'Join game'}</button>

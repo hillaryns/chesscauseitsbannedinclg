@@ -31,9 +31,15 @@ function emitState(room) {
 }
 
 io.on('connection', (socket) => {
-  socket.on('createGame', ({ sessionId, name } = {}) => {
+  socket.on('createGame', ({ sessionId, name, timeControl } = {}) => {
     if (!sessionId) return socket.emit('errorMessage', 'A session could not be created. Please refresh.');
-    const room = createGame({ socketId: socket.id, sessionId, name });
+    const room = createGame({
+      socketId: socket.id,
+      sessionId,
+      name,
+      timeControl,
+      onClockExpired: (expiredRoom) => io.to(expiredRoom.code).emit('gameOver', serializeRoom(expiredRoom)),
+    });
     socket.join(room.code);
     socket.data.sessionId = sessionId;
     socket.emit('gameCreated', { roomCode: room.code, player: 'white', state: serializeRoom(room) });
@@ -66,6 +72,7 @@ io.on('connection', (socket) => {
     const room = findRoomForSocket(socket.id);
     if (!room) return socket.emit('invalidMove', 'You are not currently in a game.');
     const result = makeMove(room, socket.id, moveInput);
+    if (result.timeout) return io.to(room.code).emit('gameOver', serializeRoom(room));
     if (result.error) return socket.emit('invalidMove', result.error);
     io.to(room.code).emit('moveMade', { move: result.move, state: serializeRoom(room) });
   });
