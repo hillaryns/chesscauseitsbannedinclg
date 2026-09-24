@@ -1,6 +1,12 @@
-# Rookroom LAN Chess
+yea they banned chesscom and shi in college and uni 
+so i made this to play with your classmates 
+just need to gitclone this and npm install in both frontend and backend directory
+then do npm run dev in both frontend and backend directory (two terminals needs to be opened)
+ahhhh and make sure u connect to the same wifi as your friend or it wont work 
+it will show u the link as local and network 
+you need to click the local and give your friend the network link to open (frontend terminal)
+create the game and give him the code which is there on top right of your screen and gg enjoy 
 
-A real-time two-player chess application for devices on the same Wi-Fi network. The backend is authoritative: every move is validated by `chess.js` on the server before it is broadcast to both clients.
 
 ## Requirements
 
